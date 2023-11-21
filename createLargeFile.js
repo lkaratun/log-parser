@@ -13,16 +13,8 @@ const readStream = new Stream.Readable({
 
 const writeStream = largeLog.createWriteStream();
 
-readStream.on('data', async chunk => {
-  const spaceRemaining = writeStream.write(chunk);
-  if (!spaceRemaining) {
-    readStream.pause();
-    await new Promise(resolve => writeStream.once('drain', resolve));
-    readStream.resume();
-  }
-});
 readStream.on('error', err => {
   console.trace(err);
 });
 
-// readStream.pipe(writeStream);
+readStream.pipe(writeStream);
