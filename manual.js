@@ -13,7 +13,7 @@ export async function lastNLines(fileName, n, searchTerm) {
   let { size: fileSize } = await fs.stat(fileName);
   const chunkSize = Math.min(25, fileSize);
   let currentPosition = fileSize;
-  while (result.length < n) {
+  while (result.length < n && currentPosition > 0) {
     const chunk = await getChunk(file, currentPosition, chunkSize);
     const chunkStr = chunk.toString();
     // First line will be a partial one. Don't consider it
