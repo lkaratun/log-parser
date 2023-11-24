@@ -7,12 +7,11 @@ async function getChunk(file, end, chunkSize) {
   return fileReadResult.buffer;
 }
 
-async function lastNLines(n) {
-  const filePath = './log';
-  const file = await util.promisify(open)(filePath, 'r');
+export async function lastNLines(fileName, n) {
+  const file = await util.promisify(open)(fileName, 'r');
   const result = [];
-  let { size: fileSize } = await fs.stat(filePath);
-  const chunkSize = Math.min(25, fileSize); // 16 kB
+  let { size: fileSize } = await fs.stat(fileName);
+  const chunkSize = Math.min(25, fileSize);
   let currentPosition = fileSize;
   while (result.length < n) {
     const chunk = await getChunk(file, currentPosition, chunkSize);
@@ -29,6 +28,3 @@ async function lastNLines(n) {
   }
   return result.slice(result.length - n);
 }
-
-const lastNLinesResult = await lastNLines(10);
-console.log('🚀 ~ file: manual.js:47 ~ test:', lastNLinesResult);
