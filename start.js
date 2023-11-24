@@ -1,10 +1,9 @@
 import express from 'express';
-import { lastNLines } from './manual.js';
+import { lastNLines } from './search.js';
 const app = express();
 
 app.get('/search', async function (req, res) {
   const { fileName, numLines, searchTerm } = req.query;
-
   const searchResult = await lastNLines(fileName, numLines, searchTerm);
   res.send(searchResult);
 });
