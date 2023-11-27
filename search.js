@@ -6,7 +6,7 @@ import path from 'path';
 const DEFAULT_CHUNK_SIZE = 16 * 1024; //16kB
 const LOG_LOCATION = '/var/log';
 
-export async function lastNLines(fileName, n, searchTerm) {
+export async function lastNLines(fileName, n = 20, searchTerm) {
   const file = await util.promisify(open)(path.resolve(LOG_LOCATION, fileName), 'r');
   let { size: fileSize } = await fs.stat(path.resolve(LOG_LOCATION, fileName));
   const chunkSize = Math.min(DEFAULT_CHUNK_SIZE, fileSize);
