@@ -19,7 +19,7 @@ export async function lastNLines(fileName, n, searchTerm) {
     // First line will be a partial one. Don't consider it
     const lines = chunkStr.split('\n').slice(1);
     const matchingLines = searchTerm ? lines.filter(line => line.includes(searchTerm)) : lines;
-    result.unshift(...matchingLines);
+    result.push(...matchingLines.reverse());
 
     const partialLineSize = getPartialLineSize(chunk);
     currentPosition -= chunkSize - partialLineSize;
