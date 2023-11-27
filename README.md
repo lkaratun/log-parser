@@ -3,11 +3,15 @@
 ## Usage
 
 1. `npm i && npm start`
-2. Send a GET request to `localhost:12345/search?fileName=<filename>&numLines=<number>&searchTerm=<string>`
+2. Send a GET request to `localhost:12345/search?fileName=<filename>&numLines=<number>&searchTerm=<string>`, where:
+
+   - `filename` is the name of the log file located under `/var/log`
+   - `searchTerm` is the term to filter the lines by. Defaults to no filtering
+   - `numLines` is the number of matches you'd like to receive. Defaults to 20
 
 ## Testing steps
 
-1. **To generate a large log file** under `/var/log/` called `cribl_test_log_<num>`:
+1. **To generate a large log file** under `/var/log` called `cribl_test_log_<num>`:
 
    `sudo node createTestLogFile.js <num>` where `num` is log10 of the number of lines to write to the test file.
 
