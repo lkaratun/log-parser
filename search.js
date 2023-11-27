@@ -1,14 +1,12 @@
 import fs from 'node:fs/promises';
 import { read, open, close } from 'fs';
 import util from 'util';
-import path from 'path';
 
 const DEFAULT_CHUNK_SIZE = 16 * 1024; //16kB
-const LOG_LOCATION = '/var/log';
 
-export async function lastNLines(fileName, n = 20, searchTerm) {
-  const file = await util.promisify(open)(path.resolve(LOG_LOCATION, fileName), 'r');
-  let { size: fileSize } = await fs.stat(path.resolve(LOG_LOCATION, fileName));
+export async function lastNLines(filePath, n = 20, searchTerm) {
+  const file = await util.promisify(open)(filePath, 'r');
+  let { size: fileSize } = await fs.stat(filePath);
   const chunkSize = Math.min(DEFAULT_CHUNK_SIZE, fileSize);
 
   const result = [];
