@@ -17,13 +17,14 @@ export async function lastNLines(filePath, n = 20, searchTerm) {
     // First line will be a partial one. Don't consider it
     const lines = chunkStr.split('\n').slice(1);
     const matchingLines = searchTerm ? lines.filter(line => line.includes(searchTerm)) : lines;
-    result.push(...matchingLines.reverse());
+
+    result.push(...matchingLines);
 
     const partialLineSize = getPartialLineSize(chunk);
     currentPosition -= chunkSize - partialLineSize;
   }
   close(file);
-  return result.slice(result.length - n);
+  return result.slice(result.length - n).reverse();
 }
 
 export async function getChunk(file, end, chunkSize) {
