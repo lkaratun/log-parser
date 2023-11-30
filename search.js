@@ -18,7 +18,7 @@ export async function lastNLines(filePath, n = 20, searchTerm) {
     const lines = chunkStr.split('\n').slice(1);
     const matchingLines = searchTerm ? lines.filter(line => line.includes(searchTerm)) : lines;
 
-    result.push(...matchingLines);
+    result.unshift(...matchingLines);
 
     const partialLineSize = getPartialLineSize(chunk);
     currentPosition -= chunkSize - partialLineSize;
