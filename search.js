@@ -26,7 +26,7 @@ export async function lastNLines(filePath, n = 20, searchTerm) {
   return result.slice(result.length - n);
 }
 
-async function getChunk(file, end, chunkSize) {
+export async function getChunk(file, end, chunkSize) {
   // If chunk is bigger than size of data to be read, only read existing data
   const chunkSizeAdjusted = Math.min(chunkSize, end);
   const fileReadResult = await util.promisify(read)(
@@ -39,8 +39,8 @@ async function getChunk(file, end, chunkSize) {
   return fileReadResult.buffer;
 }
 
-function getPartialLineSize(chunk, lineDelimiter = '\n') {
+export function getPartialLineSize(chunk, lineDelimiter = '\n') {
   const firstLineEndPositon = chunk.indexOf(lineDelimiter);
-  const partialFirstLine = chunk.slice(0, firstLineEndPositon);
+  const partialFirstLine = chunk.slice(0, firstLineEndPositon + 1);
   return Buffer.byteLength(partialFirstLine);
 }
