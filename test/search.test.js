@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import fs from 'node:fs/promises';
 import { getPartialLineSize, lastNLines } from '../search.js';
-
 const testFileName = 'testLog';
 
 describe('search', function () {
@@ -32,6 +31,13 @@ describe('search', function () {
       testLog.close();
     }
 
+    it('Returns last n matches when filter is provided', async function () {
+      await createTestFile(`Line 1\nXXX1\nLine 3\nLine 4\nXXX2\nLine 4\nXXX3`);
+      const actual = await lastNLines(testFileName, 2, 'XXX');
+      const expected = ['XXX3', 'XXX2'];
+      expect(actual).deep.to.eq(expected);
+    });
+
     it('Returns last n lines in reverse order when no filter provided', async function () {
       await createTestFile(`Line 1\nLine 2\nLine 3\nLine 4`);
       const actual = await lastNLines(testFileName, 2);
@@ -39,10 +45,23 @@ describe('search', function () {
       expect(actual).deep.to.eq(expected);
     });
 
-    it('Returns last n matches when filter is provided', async function () {
-      await createTestFile(`Line 1\nXXX1\nLine 3\nLine 4\nXXX2\nLine 4\nXXX3`);
-      const actual = await lastNLines(testFileName, 2, 'XXX');
-      const expected = ['XXX3', 'XXX2'];
+    it('Works correctly with large files', async function () {
+      const file = await fs.open(testFileName, 'w');
+      for (let i = 0; i < 1e4; i++) {
+        await file.appendFile(`Line ${i}\n`);
+      }
+      const actual = await lastNLines(testFileName, 5, '123');
+      const expected = ['Line 9123', 'Line 8123', 'Line 7123', 'Line 6123', 'Line 5123'];
+      expect(actual).deep.to.eq(expected);
+    });
+
+    it('Works correctly with large files without filter', async function () {
+      const file = await fs.open(testFileName, 'w');
+      for (let i = 0; i < 1e4; i++) {
+        await file.appendFile(`Line ${i}\n`);
+      }
+      const actual = await lastNLines(testFileName, 5);
+      const expected = ['', 'Line 9999', 'Line 9998', 'Line 9997', 'Line 9996'];
       expect(actual).deep.to.eq(expected);
     });
 
